@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Shopping Budget Planner</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+<body>
+
+<header class="header">
+
+
+<div class="logo">
+    <span>🛍️</span>
+    Shopping Budget Planner
+</div>
+
+<button id="themeBtn" class="theme-btn">
+    🌙 Dark Mode
+</button>
+
+
+</header>
+
+<main class="container">
+
+
+<section class="hero">
+
+    <div>
+        <h1>Manage Your Shopping Budget</h1>
+
+        <p>
+            Track your expenses, control your spending
+            and stay within your budget.
+        </p>
+    </div>
+
+</section>
+
+<section class="summary-grid">
+
+    <div class="summary-card budget-card">
+
+        <div class="card-icon">
+            💰
+        </div>
+
+        <div>
+            <p>Total Budget</p>
+            <h2 id="totalBudget">₹0.00</h2>
+        </div>
+
+    </div>
+
+    <div class="summary-card spent-card">
+
+        <div class="card-icon">
+            🛒
+        </div>
+
+        <div>
+            <p>Total Spent</p>
+            <h2 id="totalSpent">₹0.00</h2>
+        </div>
+
+    </div>
+
+    <div class="summary-card remaining-card">
+
+        <div class="card-icon">
+            💵
+        </div>
+
+        <div>
+            <p>Remaining</p>
+            <h2 id="remaining">₹0.00</h2>
+        </div>
+
+    </div>
+
+    <div class="summary-card count-card">
+
+        <div class="card-icon">
+            📦
+        </div>
+
+        <div>
+            <p>Total Items</p>
+            <h2 id="totalItems">0</h2>
+        </div>
+
+    </div>
+
+</section>
+
+<section id="budgetNotification"
+         class="budget-notification hidden">
+
+    <div id="notificationIcon"
+         class="notification-icon">
+        💰
+    </div>
+
+    <div>
+
+        <h3 id="notificationTitle">
+            Budget Status
+        </h3>
+
+        <p id="notificationMessage">
+            Set your budget to start tracking your spending.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h2>Set Shopping Budget</h2>
+
+            <p>
+                Enter the maximum amount you want to spend.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="budget-form">
+
+        <input
+            type="number"
+            id="budgetInput"
+            placeholder="Enter budget"
+            min="0"
+            step="0.01"
+        >
+
+        <button id="budgetBtn"
+                class="primary-btn">
+            Update Budget
+        </button>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h2>Add Shopping Expense</h2>
+
+            <p>
+                Enter the details of your shopping.
+            </p>
+
+        </div>
+
+    </div>
+
+    <form id="expenseForm">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Item Name
+                </label>
+
+                <input
+                    type="text"
+                    id="item"
+                    placeholder="Example: Shoes"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Category
+                </label>
+
+                <select id="category" required>
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option value="Groceries">
+                        🛒 Groceries
+                    </option>
+
+                    <option value="Clothing">
+                        👕 Clothing
+                    </option>
+
+                    <option value="Electronics">
+                        💻 Electronics
+                    </option>
+
+                    <option value="Food">
+                        🍔 Food
+                    </option>
+
+                    <option value="Travel">
+                        ✈️ Travel
+                    </option>
+
+                    <option value="Entertainment">
+                        🎬 Entertainment
+                    </option>
+
+                    <option value="Healthcare">
+                        💊 Healthcare
+                    </option>
+
+                    <option value="Education">
+                        📚 Education
+                    </option>
+
+                    <option value="Home">
+                        🏠 Home
+                    </option>
+
+                    <option value="Other">
+                        📦 Other
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Amount (₹)
+                </label>
+
+                <input
+                    type="number"
+                    id="amount"
+                    placeholder="Example: 1500"
+                    min="0.01"
+                    step="0.01"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="date"
+                    required
+                >
+
+            </div>
+
+        </div>
+
+        <button
+            type="submit"
+            class="primary-btn add-btn"
+        >
+            + Add Expense
+        </button>
+
+    </form>
+
+</section>
+
+<section class="panel">
+
+    <div class="filter-container">
+
+        <div>
+
+            <label>
+                Search
+            </label>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search item..."
+            >
+
+        </div>
+
+        <div>
+
+            <label>
+                Filter Category
+            </label>
+
+            <select id="filterCategory">
+
+                <option value="All">
+                    All Categories
+                </option>
+
+                <option value="Groceries">
+                    Groceries
+                </option>
+
+                <option value="Clothing">
+                    Clothing
+                </option>
+
+                <option value="Electronics">
+                    Electronics
+                </option>
+
+                <option value="Food">
+                    Food
+                </option>
+
+                <option value="Travel">
+                    Travel
+                </option>
+
+                <option value="Entertainment">
+                    Entertainment
+                </option>
+
+                <option value="Healthcare">
+                    Healthcare
+                </option>
+
+                <option value="Education">
+                    Education
+                </option>
+
+                <option value="Home">
+                    Home
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header table-header">
+
+        <div>
+
+            <h2>Shopping Expenses</h2>
+
+            <p>
+                All your shopping transactions.
+            </p>
+
+        </div>
+
+        <button
+            id="clearBtn"
+            class="danger-btn"
+        >
+            🗑 Clear All Data
+        </button>
+
+    </div>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+                    <th>Item</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="expenseTableBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<section class="panel">
+
+    <div class="panel-header">
+
+        <div>
+
+            <h2>Spending Analysis</h2>
+
+            <p>
+                Category-wise shopping expenses.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="chart-container">
+
+        <canvas id="expenseChart"></canvas>
+
+    </div>
+
+</section>
+
+
+</main>
+
+<footer>
+
+
+<p>
+    ©️ 2026 Shopping Budget Planner
+</p>
+
+
+</footer>
+
+<script
+    src="{{ url_for('static', filename='script.js') }}">
+</script>
+
+</body>
+
+</html>
